@@ -1,0 +1,160 @@
+States and Dynamiclly displaying elements:
+    - Code that initializes data for display only run one time due to the main function (App.js) being only run once.
+    - We need a way to update data so that react can 'react' to the changes to update the page.
+
+    React State:
+        - Think back to props, they are properties being passed into a component and can't be modified by them.
+        - State is the opposite, being defined within a component and meant to be changed within them.
+        - React.useState() is used to make use of state. 
+        - You use this method as the first param in an array to set the default value of a state:
+            - const [count, setCount] = React.useState(0);
+            - The second param 'setCount' is a function for modifying the state.
+
+//States function demo:
+    const [count, setCount] = React.useState(0)
+
+    function add() {
+        setCount(count + 1);
+        //DO NOT MODIFY STATE DIRECTLY example being count++ which is shorthand for count = count + 1;
+    }
+    //However, to follow best practice, use the below code:
+
+    function add() {
+        setCount(prevCount => prevCount + 1) 
+        //Whenever you want to reference an older value of state, use a placeholder value in a callback.
+    }
+
+    function sub() {
+        setCount(oldCount => prevCount - 1) //Subtraction variation
+    }
+
+---------------------------------------------------------------------------------------
+Ternary and Bools:
+
+function App() {
+    const [bool, setBool] = React.useState(true);
+
+    function changeMind() {
+        setBool(prevBool => !prevBool);
+    }
+
+    return (
+        <div className = "state"> 
+            <h1 className = "state--title">Do I feel like going out tonight?</h1>
+            <div className = "state--value" OnClick = {changeMind}>
+                <h1>${bool ? "Yes" : "No"}</h1>
+            </div>
+        </div>
+    )
+}
+
+-----------------------------------------------------------------------------------------
+State and Arrays:
+- When modifying states that are arrays be sure to utilize the spread operator
+  Ex: return [...prevArray, `Thing ${prevThingsArray.length + 1}`]
+
+function App() {
+    const [thingsArray, setThingsArray] = React.useState(["Thing1", "Thing2"])
+
+    function addItem() {
+        setThingsArray(prevThingsArray => [...prevThingsArray, "Thing${prevState.length + 1}"])
+    }
+}
+
+---------------------------------------------------------------------------------------------
+State with Objs:
+- Ex: 
+    const [contact, setContact] = React.useState({
+        firstName: "John",
+        lastName: "Doe",
+        phone: "+1 (719) 555-1212",
+        email: "davidRon@gmail.com"
+        isFav: true
+    })
+
+    let startIcon = contact.isFavorite ? "start-filled.png" : "star-empty.png";
+
+    function toggleFavorite() {
+        setContact(prevContact => { //You can use implicit return with just surrounding the obj in paranthesis
+            return {
+                ...prevContact,
+                isFavorite: !prevContact.isFavorite;
+            }
+        })
+    }
+
+    return (... <img onClick = {toggleFavorite}></img>)
+
+----------------------------------------------------------------------------------------------------
+Passing State as Props:
+- You can pass the properties of a state obj in a component.
+- However, to manipulate the state of that component, you can pass a function that controls state, as a prop
+Ex:
+const [contact, setContact] = React.useState({
+    ...,
+    isFavorite: true
+})
+
+function toggleFavorite() {
+    setContact(prevContact => ({
+        ...prevContact,
+        isFavorite: !prevContact.isFavorite
+    }))
+}
+
+return (
+    ...
+    <Star isFilled={contact.isFavorite} handleClick={toggleFavorite}/>
+)
+
+//Inside the Star component
+{
+    const starIcon = props.isFilled ? "star-filled.png" : "star-empty.png"
+
+    return (
+        <img
+            src{...}
+            className = ...
+            onClick = {handleClick} //Remember that handleClick is a function passed as a prop.
+        />
+    )
+}
+
+
+//Misc Notes: Please use grid to organize elements within forms.
+-------------------------------------------------------------------------------------------------------
+
+Conditional Rendering:
+
+import React form "react"
+
+export default function Joke(props) {
+    const [isShown, setIsShown] = React.useState(false);
+
+    function toggle() {
+        setIsShown(prevIsShown => !prevIsShown)
+    }
+
+    return (
+        <div>
+            {props.setup && <h3>{props.setup}</h3>} //This line demonstrates conditional rendering.
+            {isShown && <p>{props.punchline}</p>}
+
+            <button onClick = {toggle}>{isShown ? "Hide" : "Show"} Punchline</button>
+
+            <hr />
+        </div>
+    )
+}
+
+//Second demonstration
+
+export default function App() {
+    const [messages, setMessages] = React.useState(["a", "b"])
+
+    return (
+        <div>
+            {messages.length > 0 && <h1>You have {messages.length} unread messages</h1>}
+        </div>
+    )
+}

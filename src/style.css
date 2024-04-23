@@ -1,0 +1,51 @@
+header
+{
+    display: flex;
+    font-family: Inter;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    background-image: linear-gradient(to right, #672280, #A626D3);
+    color: white;
+    img
+    {
+        width: 200px;
+        height: 35px;
+    }
+}
+
+.main
+{
+    padding: 36px;
+    .meme
+    {
+        max-width: 100%;
+    }
+}
+
+form
+{
+    display: grid;
+    grid-template: 40px 40px / 1fr 1fr;
+    gap: 17px;
+    
+    input
+    {
+        font-family: "Karla", sans-serif;
+        border-radius: 5px;
+        border: 1px solid #D5D4D8;
+        text-indent: 5px;
+        font-weight: 700;
+    }
+    button
+    {
+        grid-column: 1/-1;
+        font-family: "Karla", sans-serif;
+        border-radius: 5px;
+        background: linear-gradient(to right, #672280, #A626D3);
+        color: white;
+        border: none;
+        cursor: pointer;
+        font-weight: 700;
+    }
+}

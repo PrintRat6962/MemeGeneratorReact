@@ -1,0 +1,102 @@
+index.js:
+
+import React from "react"
+import ReactDOM from "react-dom"
+import App from "./App"
+
+ReactDom.render(<App darkMode = {false} />, document.getElementById("root"));
+
+----------------------------------------------------------------------
+App.js:
+
+import React from "react"
+import boxes from "./boxes"
+import Boxes from "./Box"
+
+export default function App(props) {
+    const [squares, setSquares] = React.useState(boxes); //Remember that boxes is the styles config data.
+
+    function toggle(id) {
+        setSquares(prevSquares => {
+            return prevSquares.map(square => {
+                return square.id === id ? {...square, on: !square.on} : square
+            })
+        })
+    }
+
+    const squareElements = squares.map(square => (
+        <Box 
+            darkMode = {square.darkMode}
+            //key = {square.id} //The key prop seems to be reserved keyword. Use 'id' for usable id's
+            id = {square.id}
+            toggle = {toggle}
+            //toggle = {() => toggle(square.id)} //Alternate way of passing function, with a closure instead.
+        />
+    ))
+
+
+    return (
+        <main>
+            {squareElements}
+        </main>
+    )
+}
+
+---------------------------------------------------------------------
+Styles:
+
+.box {
+    height: 100px;
+    width: 100px;
+    border: 1px solid black;
+    display: inline-block;
+    margin-right: 4px;
+}
+----------------------------------------------------------------------
+
+import React from "react"
+
+export default function Boxes(props) {
+    const [darkMode, setDarkMode] = React.useState(props.darkMode)
+
+    const styles = {
+        backgroundColor: darkMode ? #222222 : #cccccc
+    }
+
+    function toggleDarkMode() {
+        setDarkMode(prevDarkMode => !prevDarkMode)
+    }
+
+    return(
+        <div styles = {styles} className = "box" key={props.key} onClick={() => props.toggle(props.id)}>
+        </div>
+        //In the code above with the style attribute, the curly braces enables JS
+    )
+}
+
+//When you want to pass down a function to a component via a prop, remember that don't get to 
+//decide what param gets passed to the function.
+//To work around this we can pass an arrow function that takes the event obj automatically, which 
+//in-turn runs the prop function, enabling us to enter params.
+
+//A more imperative version of the toggle function
+/* const newSquares = []
+            for(let i = 0; i < prevSquares.length; i++)
+            {
+                const currentSquare = prevSquares[i];
+                if(currentSquare.id === id)
+                {
+                    const updatedSquare = {
+                        ...currentSquare,
+                        on: !currentSquare.on
+                    }
+                    newSquares.push(updatedSquare)
+                }
+                else 
+                {
+                    newSquares.push(currentSquare)
+                }
+            }
+
+            return newSquares;
+*/
