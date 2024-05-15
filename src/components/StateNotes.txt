@@ -15,7 +15,7 @@ States and Dynamiclly displaying elements:
 
     function add() {
         setCount(count + 1);
-        //DO NOT MODIFY STATE DIRECTLY example being count++ which is shorthand for count = count + 1;
+        //THIS IS WRONG!! DO NOT MODIFY STATE DIRECTLY
     }
     //However, to follow best practice, use the below code:
 

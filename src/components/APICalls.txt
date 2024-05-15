@@ -1,0 +1,72 @@
+Intro:
+- When making calls that change state at a higher level of the component, it will cause an infinite loop:
+    - Component renders state => then runs the API call that sets the state => Causes component to render again
+      => Causing the API call to continue changing state.
+
+-Ex:
+    const [starWarsData, setStarWarsData] = React.useState({})
+    fetch("link here").then(res => res.json()).then(data => setStarWarsData(data)) //THIS IS WRONG
+
+-------------------------------------------------------------------------------------------------------------
+Side Effects and useEffect():
+- React's primary tasks:
+    - Work with DOM to render UI to the page.
+    - Manage state between render cycles.
+    - Keep UI updated whenever state changes.
+
+- Side Effects, What React can't handle on its own.
+    - localStorage
+    - API/database interactions
+    - Subscriptions
+    - Syncing 2 different internal states.
+
+- Solution to this is useEffect()
+
+-------------------------------------------------------------------------------------------------------------
+Using the useEffect() hook and the dependencies array:
+
+export default function App() {
+    const [starWarsData, setStarWarsData] = React.useState({})
+
+    React.useEffect(function() {
+        fetch("link here")
+            .then(res => res.json())
+            .then(data => setStarWarsData(data))
+    }, []) 
+    //The second parameter determines when the effect will run
+    //If the array is empty, it means that the effect will only run once.
+    //If there is a variable in the array that changes, then the effect will run
+}
+
+---------------------------------------------------------------------------------------------------------------
+Challenge 1:
+export default function App() {
+    const [count, setCount] = React.useState(0)
+
+    console.log("Component Rendered")
+
+    React.useEffect(function() {
+        console.log("Effect Run")
+    }, [])
+}
+---------------------------------------------------------------------------------------------------------------
+export default function App() {
+    const [starWarsData, setStarWarsData] = React.useState({})
+    const [count, setCount] = React.useState(1)
+
+    React.useEffect(function() {
+        console.log("Effect Ran")
+        fetch("link" + count)
+            .then(res => res.json())
+            .then(data => setStarWarsData(data))
+    }, [count])
+
+    return (
+        <div>
+            <h2>The count is {count}</h2>
+            <button onClick={setCount(prevCount => prevCount + 1)}></button>
+        </div>
+    )
+}
+
+
